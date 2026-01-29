@@ -1,0 +1,6 @@
+host: api.example.com
+port: 8080
+apiKey: abc123xyz789
+timeout: 30
+retryAttempts: 3
+enableLogging: true
