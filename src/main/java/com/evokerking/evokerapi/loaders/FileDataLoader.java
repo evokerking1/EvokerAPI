@@ -25,10 +25,25 @@ public class FileDataLoader implements DataLoader {
     
     @Override
     public Map<String, Object> load(String filePath) throws DataLoadException {
+        if (filePath == null || filePath.trim().isEmpty()) {
+            throw new DataLoadException("File path cannot be null or empty");
+        }
+        
         try {
-            Path path = Paths.get(filePath);
+            Path path = Paths.get(filePath).normalize();
+            
+            // Validate path - prevent null bytes and directory traversal patterns
+            String normalizedPath = path.toString();
+            if (normalizedPath.contains("\0")) {
+                throw new DataLoadException("Invalid file path: contains null byte");
+            }
+            
             if (!Files.exists(path)) {
                 throw new DataLoadException("File not found: " + filePath);
+            }
+            
+            if (!Files.isRegularFile(path)) {
+                throw new DataLoadException("Path is not a regular file: " + filePath);
             }
             
             String content = Files.readString(path);
@@ -44,7 +59,8 @@ public class FileDataLoader implements DataLoader {
                 PropertiesParser propertiesParser = new PropertiesParser();
                 return propertiesParser.parse(content);
             } else {
-                throw new DataLoadException("Unsupported file format: " + fileName);
+                throw new DataLoadException("Unsupported file format: " + fileName + 
+                    ". Supported formats are: .json, .yaml, .yml, .properties");
             }
         } catch (IOException e) {
             throw new DataLoadException("Failed to load file: " + filePath, e);

@@ -1,17 +1,21 @@
 package com.evokerking.evokerapi.parsers;
 
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 import java.util.Map;
 
 /**
- * Parser for YAML data using SnakeYAML.
+ * Parser for YAML data using SnakeYAML with safe parsing.
+ * Uses SafeConstructor to prevent arbitrary code execution vulnerabilities.
  */
 public class YamlParser {
     private final Yaml yaml;
     
     public YamlParser() {
-        this.yaml = new Yaml();
+        // Use SafeConstructor to prevent arbitrary code execution (CVE-2022-1471)
+        this.yaml = new Yaml(new SafeConstructor(new LoaderOptions()));
     }
     
     /**

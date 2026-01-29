@@ -23,6 +23,10 @@ public class DataBinder {
      * @throws DataBindException if binding fails
      */
     public <T> T bind(Class<T> clazz, Map<String, Object> data) throws DataBindException {
+        if (data == null) {
+            throw new DataBindException("Data map cannot be null");
+        }
+        
         if (!clazz.isAnnotationPresent(DataDriven.class)) {
             throw new DataBindException("Class " + clazz.getName() + " is not annotated with @DataDriven");
         }
@@ -101,7 +105,12 @@ public class DataBinder {
         // Set the field value
         if (value != null) {
             field.setAccessible(true);
-            field.set(instance, convertValue(value, field.getType()));
+            try {
+                field.set(instance, convertValue(value, field.getType()));
+            } catch (IllegalAccessException e) {
+                throw new DataBindException("Cannot access field '" + field.getName() + 
+                    "'. Consider making the field package-private or providing a setter method.", e);
+            }
         }
     }
     
@@ -180,7 +189,9 @@ public class DataBinder {
             } else if (targetType == String.class) {
                 return strValue;
             } else if (targetType.isEnum()) {
-                return Enum.valueOf((Class<Enum>) targetType, strValue);
+                @SuppressWarnings("unchecked")
+                Class<Enum> enumType = (Class<Enum>) targetType;
+                return Enum.valueOf(enumType, strValue);
             }
         } catch (Exception e) {
             throw new DataBindException("Cannot convert value '" + value + "' to type " + targetType.getName(), e);

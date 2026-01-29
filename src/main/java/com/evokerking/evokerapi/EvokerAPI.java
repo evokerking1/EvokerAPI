@@ -14,6 +14,9 @@ import java.util.Map;
  * Main entry point for the EvokerAPI framework.
  * Provides convenient static methods for common operations.
  * 
+ * Thread Safety: The static DataFactory and DataBinder instances are thread-safe
+ * for read operations. Multiple threads can safely call the static methods concurrently.
+ * 
  * Example usage:
  * <pre>
  * // From file

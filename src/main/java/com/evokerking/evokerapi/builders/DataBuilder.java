@@ -99,14 +99,16 @@ public class DataBuilder<T> {
      */
     public T build() throws DataBindException, DataLoadException {
         DataBinder binder = new DataBinder();
-        Map<String, Object> finalData = new HashMap<>(data);
+        Map<String, Object> finalData = new HashMap<>();
         
         // Load data from loader if specified
         if (loader != null) {
             Map<String, Object> loadedData = source != null ? loader.load(source) : loader.load();
-            // Merge loaded data with manually added data (manual data takes precedence)
-            loadedData.putAll(finalData);
-            finalData = loadedData;
+            // Start with loaded data, then overlay manual data (manual data takes precedence)
+            finalData.putAll(loadedData);
+            finalData.putAll(data);
+        } else {
+            finalData.putAll(data);
         }
         
         return binder.bind(clazz, finalData);
