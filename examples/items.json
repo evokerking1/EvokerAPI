@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "id": "iron_sword",
+      "name": "Iron Sword",
+      "description": "A sturdy sword made of iron",
+      "type": "WEAPON",
+      "rarity": "COMMON",
+      "stackable": false,
+      "maxStackSize": 1,
+      "properties": {
+        "damage": 7,
+        "durability": 250,
+        "attackSpeed": 1.6
+      }
+    },
+    {
+      "id": "iron_ingot",
+      "name": "Iron Ingot",
+      "description": "A bar of refined iron",
+      "type": "MATERIAL",
+      "rarity": "COMMON",
+      "stackable": true,
+      "maxStackSize": 64,
+      "properties": {
+        "weight": 5.0
+      }
+    },
+    {
+      "id": "wooden_stick",
+      "name": "Wooden Stick",
+      "description": "A simple wooden stick",
+      "type": "MATERIAL",
+      "rarity": "COMMON",
+      "stackable": true,
+      "maxStackSize": 64,
+      "properties": {
+        "weight": 0.5
+      }
+    },
+    {
+      "id": "health_potion",
+      "name": "Health Potion",
+      "description": "Restores health when consumed",
+      "type": "CONSUMABLE",
+      "rarity": "UNCOMMON",
+      "stackable": true,
+      "maxStackSize": 16,
+      "properties": {
+        "healAmount": 50,
+        "duration": 0,
+        "cooldown": 30
+      }
+    },
+    {
+      "id": "diamond_helmet",
+      "name": "Diamond Helmet",
+      "description": "A helmet forged from diamonds",
+      "type": "ARMOR",
+      "rarity": "RARE",
+      "stackable": false,
+      "maxStackSize": 1,
+      "properties": {
+        "defense": 15,
+        "durability": 500,
+        "armorType": "HELMET"
+      }
+    }
+  ]
+}

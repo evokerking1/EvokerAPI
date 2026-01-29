@@ -1,0 +1,65 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.evokerking'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JSON support with Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    
+    // YAML support with SnakeYAML
+    implementation 'org.yaml:snakeyaml:2.2'
+    
+    // Testing dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Configure javadoc to be less strict
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+// Generate sources jar
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+// Maven publishing configuration
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            
+            pom {
+                name = 'EvokerAPI'
+                description = 'A Java framework for building data-driven applications'
+                url = 'https://github.com/evokerking1/EvokerAPI'
+                
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+}

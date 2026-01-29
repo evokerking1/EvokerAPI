@@ -1,0 +1,9 @@
+{
+  "host": "localhost",
+  "port": 5432,
+  "database": "myapp",
+  "username": "admin",
+  "password": "secret123",
+  "connectionPoolSize": 20,
+  "connectionTimeout": 60000
+}

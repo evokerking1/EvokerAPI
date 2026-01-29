@@ -1,0 +1,79 @@
+{
+  "items": [
+    {
+      "id": "iron_sword_recipe",
+      "name": "Iron Sword Recipe",
+      "type": "CRAFTING",
+      "description": "Craft an iron sword",
+      "ingredients": [
+        {
+          "item": "iron_ingot",
+          "amount": 2
+        },
+        {
+          "item": "wooden_stick",
+          "amount": 1
+        }
+      ],
+      "result": {
+        "item": "iron_sword",
+        "amount": 1
+      },
+      "craftingTime": 5.0,
+      "requirements": {
+        "craftingLevel": 10,
+        "station": "anvil"
+      }
+    },
+    {
+      "id": "health_potion_recipe",
+      "name": "Health Potion Recipe",
+      "type": "ALCHEMY",
+      "description": "Brew a health potion",
+      "ingredients": [
+        {
+          "item": "red_herb",
+          "amount": 3
+        },
+        {
+          "item": "water_bottle",
+          "amount": 1
+        }
+      ],
+      "result": {
+        "item": "health_potion",
+        "amount": 1
+      },
+      "craftingTime": 30.0,
+      "requirements": {
+        "alchemyLevel": 5,
+        "station": "alchemy_table"
+      }
+    },
+    {
+      "id": "iron_ingot_smelting",
+      "name": "Iron Ingot Smelting",
+      "type": "SMELTING",
+      "description": "Smelt iron ore into ingots",
+      "ingredients": [
+        {
+          "item": "iron_ore",
+          "amount": 1
+        },
+        {
+          "item": "coal",
+          "amount": 1
+        }
+      ],
+      "result": {
+        "item": "iron_ingot",
+        "amount": 1
+      },
+      "craftingTime": 10.0,
+      "requirements": {
+        "station": "furnace",
+        "temperature": 1500
+      }
+    }
+  ]
+}

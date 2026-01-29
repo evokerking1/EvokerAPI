@@ -1,0 +1,8 @@
+{
+  "host": "api.example.com",
+  "port": 443,
+  "apiKey": "json-api-key-123",
+  "timeout": 45,
+  "retryAttempts": 3,
+  "enableLogging": true
+}
