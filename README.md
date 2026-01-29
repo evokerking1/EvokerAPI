@@ -1,6 +1,6 @@
 # EvokerAPI
 
-A powerful Java framework for building data-driven applications with Gradle. EvokerAPI makes it easy to create configuration classes and populate them from various data sources including JSON (using **Gson**), YAML, and properties files.
+A powerful Java framework for building data-driven applications with Gradle. EvokerAPI makes it easy to create configuration classes and populate them from various data sources including JSON (using **Gson**), YAML, and properties files. **Now with built-in support for game content like items, recipes, and more!**
 
 ## Features
 
@@ -12,6 +12,9 @@ A powerful Java framework for building data-driven applications with Gradle. Evo
 - 🎯 **Default values** - Specify defaults for optional fields
 - 🔌 **Extensible** - Custom data loaders and parsers
 - 📦 **Gradle-based** - Easy integration into Gradle projects
+- 🎮 **Game Content Models** - Built-in Item and Recipe models
+- 🗂️ **Registry System** - Manage collections of data-driven content
+- 📋 **Batch Loading** - Load multiple items/recipes from single files
 
 ## Installation
 
@@ -247,6 +250,173 @@ DataFactory factory = EvokerAPI.getFactory();
 Config config = factory.create(Config.class, new DatabaseLoader(), "config_table");
 ```
 
+## Data-Driven Content System
+
+EvokerAPI includes a powerful content system for creating game items, recipes, and other data-driven content.
+
+### Built-in Content Models
+
+#### Items
+
+Create game items with properties, rarity, and type information:
+
+```java
+import com.evokerking.evokerapi.content.models.Item;
+
+// Load from JSON
+Item sword = EvokerAPI.loadFromFile(Item.class, "iron_sword.json");
+
+System.out.println(sword.getName());     // "Iron Sword"
+System.out.println(sword.getRarity());   // "COMMON"
+System.out.println(sword.isStackable()); // false
+
+// Access custom properties
+double damage = sword.getProperty("damage", Double.class, 0.0);
+```
+
+Example `iron_sword.json`:
+```json
+{
+  "id": "iron_sword",
+  "name": "Iron Sword",
+  "description": "A sturdy sword made of iron",
+  "type": "WEAPON",
+  "rarity": "COMMON",
+  "stackable": false,
+  "maxStackSize": 1,
+  "properties": {
+    "damage": 7,
+    "durability": 250,
+    "attackSpeed": 1.6
+  }
+}
+```
+
+#### Recipes
+
+Create crafting recipes with ingredients and requirements:
+
+```java
+import com.evokerking.evokerapi.content.models.Recipe;
+
+Recipe recipe = EvokerAPI.loadFromFile(Recipe.class, "iron_sword_recipe.json");
+
+System.out.println(recipe.getName());           // "Iron Sword Recipe"
+System.out.println(recipe.getResultItem());     // "iron_sword"
+System.out.println(recipe.hasIngredient("iron_ingot")); // true
+```
+
+Example `iron_sword_recipe.json`:
+```json
+{
+  "id": "iron_sword_recipe",
+  "name": "Iron Sword Recipe",
+  "type": "CRAFTING",
+  "description": "Craft an iron sword",
+  "ingredients": [
+    {"item": "iron_ingot", "amount": 2},
+    {"item": "wooden_stick", "amount": 1}
+  ],
+  "result": {
+    "item": "iron_sword",
+    "amount": 1
+  },
+  "craftingTime": 5.0,
+  "requirements": {
+    "craftingLevel": 10,
+    "station": "anvil"
+  }
+}
+```
+
+### Registry System
+
+Manage collections of content with the `DataRegistry`:
+
+```java
+import com.evokerking.evokerapi.content.registry.DataRegistry;
+
+// Create registries
+DataRegistry<Item> itemRegistry = new DataRegistry<>("Items");
+DataRegistry<Recipe> recipeRegistry = new DataRegistry<>("Recipes");
+
+// Register items
+itemRegistry.register("iron_sword", ironSword);
+itemRegistry.register("health_potion", healthPotion);
+
+// Look up items
+Item sword = itemRegistry.get("iron_sword");
+
+// Query items
+List<Item> weapons = itemRegistry.findAll(item -> "WEAPON".equals(item.getType()));
+```
+
+### Batch Loading
+
+Load multiple items or recipes from a single file:
+
+```java
+import com.evokerking.evokerapi.content.registry.ContentLoader;
+
+DataRegistry<Item> itemRegistry = new DataRegistry<>("Items");
+
+// Load all items from a JSON file
+int count = ContentLoader.loadFromArrayFile(
+    itemRegistry,
+    Item.class,
+    "items.json"
+);
+
+System.out.println("Loaded " + count + " items");
+```
+
+Example `items.json`:
+```json
+{
+  "items": [
+    {
+      "id": "iron_sword",
+      "name": "Iron Sword",
+      "type": "WEAPON",
+      ...
+    },
+    {
+      "id": "health_potion",
+      "name": "Health Potion",
+      "type": "CONSUMABLE",
+      ...
+    }
+  ]
+}
+```
+
+### Creating Custom Content
+
+Extend the base models or create your own:
+
+```java
+@DataDriven
+public class Monster {
+    @DataField @Required
+    private String id;
+    
+    @DataField @Required
+    private String name;
+    
+    @DataField
+    private int health;
+    
+    @DataField
+    private Map<String, Object> abilities;
+    
+    // Getters, setters, etc.
+}
+
+// Use the same loading and registry system
+DataRegistry<Monster> monsters = new DataRegistry<>("Monsters");
+ContentLoader.loadFromArrayFile(monsters, Monster.class, "monsters.json");
+```
+
 ## Examples
 
 The framework includes several example programs in the `examples/` directory:
@@ -267,6 +437,15 @@ Shows JSON file loading using Gson.
 cd examples
 javac -cp "../build/libs/*" JsonExample.java
 java -cp ".:../build/libs/*" com.evokerking.evokerapi.examples.JsonExample
+```
+
+### Content System Example
+Demonstrates data-driven items, recipes, and registry system.
+
+```bash
+cd examples
+javac -cp "../build/libs/*" ContentSystemExample.java
+java -cp ".:../build/libs/*" com.evokerking.evokerapi.examples.ContentSystemExample
 ```
 
 ## Building from Source
@@ -300,6 +479,9 @@ cd EvokerAPI
 - **Plugin Systems** - Configure plugins from external data
 - **Data-Driven Testing** - Parameterize tests with external data
 - **Microservices** - Externalized configuration for cloud-native apps
+- **Game Development** - Create items, recipes, monsters, and other game content from JSON/YAML files
+- **Content Management** - Manage large collections of data-driven content with registries
+- **Modding Systems** - Allow users to create custom content via data files
 
 ## Best Practices
 

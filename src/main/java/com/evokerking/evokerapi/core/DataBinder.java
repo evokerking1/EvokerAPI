@@ -147,6 +147,14 @@ public class DataBinder {
             return value;
         }
         
+        // Handle Map and List - don't convert, just return as-is
+        if (Map.class.isAssignableFrom(targetType) && value instanceof Map) {
+            return value;
+        }
+        if (java.util.List.class.isAssignableFrom(targetType) && value instanceof java.util.List) {
+            return value;
+        }
+        
         // Handle Number to Number conversions (important for JSON parsing)
         if (value instanceof Number) {
             Number num = (Number) value;
